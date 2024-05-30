@@ -1,44 +1,31 @@
 package main
 
 import (
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	"fmt"
 	"html/template"
-	"io"
 	"net/http"
 )
 
-type Template struct {
-	templates *template.Template
-}
-
-func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	return t.templates.ExecuteTemplate(w, name, data)
-}
-
 func main() {
-	e := echo.New()
+	mux := http.NewServeMux()
 
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello World! you have hit the root")
+	})
 
-	// The & in &Template returns the pointer instead of the instance
-	t := &Template{
-		templates: template.Must(template.ParseGlob("templates/*.html")),
-	}
-	e.Renderer = t
+	mux.HandleFunc("GET /html", func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles("templates/recipe_list.html"))
+		title := "Hi Bby"
+		data := map[string]string{
+			"title": title,
+		}
+		tmpl.Execute(w, data)
+	})
 
-	// Change this to do a list template
-	e.GET("/", hello)
-	e.GET("/list", hiya)
+	mux.HandleFunc("GET /recipes/{id}", func(w http.ResponseWriter, r *http.Request) {
+		id := r.PathValue("id")
+		fmt.Fprintf(w, "You are looking for recipe: %s", id)
+	})
 
-	e.Logger.Fatal(e.Start(":8080"))
-}
-
-func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
-}
-
-func hiya(c echo.Context) error {
-	return c.Render(http.StatusOK, "recipe_list", nil)
+	http.ListenAndServe(":8080", mux)
 }
