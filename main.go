@@ -17,19 +17,17 @@ func main() {
 		fmt.Fprintf(w, "Hello World! you have hit the root")
 	})
 
-	mux.HandleFunc("GET /html", func(w http.ResponseWriter, r *http.Request) {
+
+	mux.HandleFunc("GET /recipes", func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("templates/recipe_list.html"))
-		title := "Hi Bby"
-		data := map[string]string{
-			"title": title,
-		}
-		tmpl.Execute(w, data)
+		tmpl.Execute(w, nil)
 	})
 
-	mux.HandleFunc("GET /recipes/{id}", func(w http.ResponseWriter, r *http.Request) {
-		id := r.PathValue("id")
-		fmt.Fprintf(w, "You are looking for recipe: %s", id)
+	mux.HandleFunc("GET /recipe/new", func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles("templates/new_recipe.html"))
+		tmpl.Execute(w, nil)
 	})
+
 
 	http.ListenAndServe(":8080", mux)
 }
