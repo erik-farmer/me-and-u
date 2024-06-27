@@ -6,5 +6,31 @@
 </head>
 <body>
     This page is for creating a new recipe
+    <br />
+    <form action="/recipe/new/" method="POST">
+        <div>
+            <label for="name">Recipe Name</label>
+            <input name="name" id="name" />
+        </div>
+        <div>
+            <label for="url">Url</label>
+            <input name="url" id="url" />
+        </div>
+        <div>
+            <label for="ingredients">Ingredients (new line delimited)</label>
+            <input name="ingredients" id="ingredients" />
+        </div>
+        <div>
+            <label for="steps">Steps (new line delimited)</label>
+            <input name="steps" id="steps" />
+        </div>
+        <div>
+            <label for="notes">Notes</label>
+            <input name="notes" id="notes" />
+        </div>
+        <div>
+            <button>Save</button>
+        </div>
+    </form>
 </body>
 </html>
