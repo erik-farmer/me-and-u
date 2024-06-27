@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+
+	"github.com/erik-farmer/me-and-u/db"
 )
 
 func main() {
-	db := init_db()
+	db := db.InitDB()
 	defer db.Close()
 
 	mux := http.NewServeMux()
