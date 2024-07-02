@@ -54,6 +54,13 @@ func main() {
 		tmpl.Execute(w, template_data)
 	})
 
+	mux.HandleFunc("GET /recipe/{id}/", func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles("templates/recipe_detail.html"))
+		idString := r.PathValue("id")
+		template_data := map[string]string{"id": idString}
+		tmpl.Execute(w, template_data)
+	})
+
 	mux.HandleFunc("GET /recipe/new/", func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("templates/new_recipe.html"))
 		tmpl.Execute(w, nil)
