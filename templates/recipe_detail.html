@@ -5,6 +5,13 @@
     <title>Recipe Detail</title>
 </head>
 <body>
-Detail for recipe {{ .id}}
+    <h1>{{ .recipe.Name}}</h1>
+    <a href="{{ .recipe.URL}}">Link</a>
+    <h2>Ingredients</h2>
+    {{ .recipe.Ingredients}}
+    <h2>Steps</h2>
+    {{ .recipe.Steps}}
+    <h2>Notes</h2>
+    {{ .recipe.Notes}}
 </body>
 </html>

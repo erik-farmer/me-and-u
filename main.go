@@ -57,7 +57,16 @@ func main() {
 	mux.HandleFunc("GET /recipe/{id}/", func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("templates/recipe_detail.html"))
 		idString := r.PathValue("id")
-		template_data := map[string]string{"id": idString}
+
+		row := database.QueryRow("SELECT * from recipes WHERE rowid=?", idString)
+		recipe := data.Recipe{}
+		error := row.Scan(&recipe.Name, &recipe.URL, &recipe.Ingredients, &recipe.Steps, &recipe.Notes)
+		if error != nil {
+			println(error.Error())
+			// ToDo 404 here
+		}
+
+		template_data := map[string]data.Recipe{"recipe": recipe}
 		tmpl.Execute(w, template_data)
 	})
 
