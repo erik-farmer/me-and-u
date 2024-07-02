@@ -5,6 +5,8 @@
     <title>Recipes</title>
 </head>
 <body>
-    Recipes will show up here!
+    {{range .recipes}}
+        {{.Name}}<br>
+    {{end}}
 </body>
 </html>

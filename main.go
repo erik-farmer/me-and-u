@@ -29,8 +29,29 @@ func main() {
 	// ToDo: make handlers it's own package?
 
 	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
+		rows, err := database.Query("SELECT name, url FROM recipes")
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "failed to execute query: %v\n", err)
+			os.Exit(1)
+		}
+		defer rows.Close()
+
+		var recipes []data.Recipe
+		for rows.Next() {
+			var recipe data.Recipe
+
+			if err := rows.Scan(&recipe.Name, &recipe.URL); err != nil {
+				fmt.Println("Error scanning row:", err)
+				return
+			}
+			recipes = append(recipes, recipe)
+		}
+
+		template_data := map[string]interface{}{
+			"recipes": recipes,
+		}
 		tmpl := template.Must(template.ParseFiles("templates/recipe_list.html"))
-		tmpl.Execute(w, nil)
+		tmpl.Execute(w, template_data)
 	})
 
 	mux.HandleFunc("GET /recipe/new/", func(w http.ResponseWriter, r *http.Request) {
