@@ -1,28 +1,28 @@
 package db
 
 import (
-	"database/sql"
 	"fmt"
 	"github.com/tursodatabase/go-libsql"
 	"os"
 	"path/filepath"
 )
 
-func InitDB() *sql.DB {
-	dbName := "local.db"
-	dbUrl := "libsql://me-and-u-dev-efdev.turso.io"
-	authToken := os.Getenv("TURSO_TOKEN")
-
+func MakeDbDir() string {
 	dir, err := os.MkdirTemp("", "libsql-*")
 	if err != nil {
 		fmt.Println("Error creating temporary directory:", err)
 		os.Exit(1)
 	}
-	defer os.RemoveAll(dir)
+	return dir
+}
+
+func MakeDbConnector(dir string) *libsql.Connector {
+	dbName := "local.db"
+	primaryUrl := os.Getenv("TURSO_URL")
+	authToken := os.Getenv("TURSO_TOKEN")
 
 	dbPath := filepath.Join(dir, dbName)
-
-	connector, err := libsql.NewEmbeddedReplicaConnector(dbPath, dbUrl,
+	connector, err := libsql.NewEmbeddedReplicaConnector(dbPath, primaryUrl,
 		libsql.WithAuthToken(authToken),
 	)
 	if err != nil {
@@ -30,6 +30,5 @@ func InitDB() *sql.DB {
 		os.Exit(1)
 	}
 
-	db := sql.OpenDB(connector)
-	return db
+	return connector
 }
