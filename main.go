@@ -29,7 +29,7 @@ func main() {
 	// ToDo: make handlers it's own package?
 
 	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		rows, err := database.Query("SELECT name, url FROM recipes")
+		rows, err := database.Query("SELECT rowid, name, url FROM recipes")
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "failed to execute query: %v\n", err)
 			os.Exit(1)
@@ -40,7 +40,7 @@ func main() {
 		for rows.Next() {
 			var recipe data.Recipe
 
-			if err := rows.Scan(&recipe.Name, &recipe.URL); err != nil {
+			if err := rows.Scan(&recipe.ROW_ID, &recipe.Name, &recipe.URL); err != nil {
 				fmt.Println("Error scanning row:", err)
 				return
 			}
