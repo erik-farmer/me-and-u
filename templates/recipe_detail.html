@@ -2,16 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Recipe Detail</title>
+    <title>{{ .recipe.Name}}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css" integrity="sha384-H4X+4tKc7b8s4GoMrylmy2ssQYpDHoqzPa9aKXbDwPoPUA3Ra8PA5dGzijN+ePnH" crossorigin="anonymous">
 </head>
 <body>
-    <h1>{{ .recipe.Name}}</h1>
-    <a href="{{ .recipe.URL}}">Link</a>
-    <h2>Ingredients</h2>
-    {{ .recipe.Ingredients}}
-    <h2>Steps</h2>
-    {{ .recipe.Steps}}
-    <h2>Notes</h2>
-    {{ .recipe.Notes}}
+    <div class="container">
+        <h1>{{ .recipe.Name}}</h1>
+        <a href="{{ .recipe.URL}}">Link</a>
+        <hr/>
+        <h2>Ingredients</h2>
+        {{ .recipe.Ingredients}}
+        <h2>Steps</h2>
+        {{ .recipe.Steps}}
+        <h2>Notes</h2>
+        {{ .recipe.Notes}}
+    </div>
 </body>
 </html>
