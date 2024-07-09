@@ -3,12 +3,14 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/erik-farmer/me-and-u/middleware"
 	"html/template"
 	"net/http"
 	"os"
 
 	"github.com/erik-farmer/me-and-u/data"
 	"github.com/erik-farmer/me-and-u/db"
+	"github.com/erik-farmer/me-and-u/handlers"
 )
 
 func main() {
@@ -70,10 +72,7 @@ func main() {
 		tmpl.Execute(w, template_data)
 	})
 
-	mux.HandleFunc("GET /recipe/new/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl := template.Must(template.ParseFiles("templates/new_recipe.html"))
-		tmpl.Execute(w, nil)
-	})
+	mux.HandleFunc("GET /recipe/new/", handlers.NewRecipe)
 
 	mux.HandleFunc("POST /recipe/new/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Validating that we hit POST")
@@ -98,5 +97,9 @@ func main() {
 		tmpl.Execute(w, nil)
 	})
 
-	http.ListenAndServe(":8080", mux)
+	server := http.Server{
+		Addr:    ":8080",
+		Handler: middleware.Logging(mux),
+	}
+	server.ListenAndServe()
 }
