@@ -2,3 +2,9 @@
 
 # The binary
 me-and-u
+
+# Things used for deployment
+.dockerignore
+.github/
+Dockerfile
+fly.toml
