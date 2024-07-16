@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/erik-farmer/me-and-u/handlers"
 	"github.com/erik-farmer/me-and-u/middleware"
 	"html/template"
 	"net/http"
@@ -10,7 +11,6 @@ import (
 
 	"github.com/erik-farmer/me-and-u/data"
 	"github.com/erik-farmer/me-and-u/db"
-	"github.com/erik-farmer/me-and-u/handlers"
 )
 
 func main() {
@@ -97,9 +97,13 @@ func main() {
 		tmpl.Execute(w, nil)
 	})
 
+	middlewareStack := middleware.CreateStackMiddleware(
+		middleware.Logging,
+		middleware.Authorize,
+	)
 	server := http.Server{
 		Addr:    ":8080",
-		Handler: middleware.Logging(mux),
+		Handler: middlewareStack(mux),
 	}
 	server.ListenAndServe()
 }
