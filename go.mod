@@ -2,7 +2,10 @@ module github.com/erik-farmer/me-and-u
 
 go 1.22.1
 
-require github.com/tursodatabase/go-libsql v0.0.0-20240429120401-651096bbee0b
+require (
+	github.com/joho/godotenv v1.5.1
+	github.com/tursodatabase/go-libsql v0.0.0-20240429120401-651096bbee0b
+)
 
 require (
 	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect

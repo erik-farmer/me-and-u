@@ -1,7 +1,11 @@
+# jet Brains
 .idea/*
 
 # The binary
 me-and-u
+
+# Local dev
+.env
 
 # Things used for deployment
 .dockerignore

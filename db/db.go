@@ -2,7 +2,9 @@ package db
 
 import (
 	"fmt"
+	"github.com/joho/godotenv"
 	"github.com/tursodatabase/go-libsql"
+	"log"
 	"os"
 	"path/filepath"
 )
@@ -18,6 +20,9 @@ func MakeDbDir() string {
 
 func MakeDbConnector(dir string) *libsql.Connector {
 	dbName := "local.db"
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Failed to load the env vars: %v", err)
+	}
 	primaryUrl := os.Getenv("TURSO_URL")
 	authToken := os.Getenv("TURSO_TOKEN")
 
@@ -30,5 +35,6 @@ func MakeDbConnector(dir string) *libsql.Connector {
 		os.Exit(1)
 	}
 
+	log.Printf("Connected to Database")
 	return connector
 }

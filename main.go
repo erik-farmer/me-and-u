@@ -3,26 +3,29 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/erik-farmer/me-and-u/data"
+	"github.com/erik-farmer/me-and-u/db"
 	"github.com/erik-farmer/me-and-u/handlers"
 	"github.com/erik-farmer/me-and-u/middleware"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
-
-	"github.com/erik-farmer/me-and-u/data"
-	"github.com/erik-farmer/me-and-u/db"
 )
 
 func main() {
+	log.Print("Starting server...")
 	dir := db.MakeDbDir()
 	defer os.RemoveAll(dir)
 
 	connector := db.MakeDbConnector(dir)
+	log.Print("Connecting to database...")
 	defer connector.Close()
 
 	// ToDo: https://www.alexedwards.net/blog/organising-database-access
 	// Method 2 is probably fine and good practice
 	database := sql.OpenDB(connector)
+	log.Print("Database connected!")
 	defer database.Close()
 
 	mux := http.NewServeMux()
