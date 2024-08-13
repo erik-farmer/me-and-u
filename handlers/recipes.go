@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/erik-farmer/me-and-u/data"
 	"github.com/gin-gonic/gin"
-	"html/template"
 	"net/http"
 	"os"
 )
@@ -43,7 +42,6 @@ func RecipeDetailHandler(db *sql.DB) gin.HandlerFunc {
 	return fn
 }
 
-func NewRecipe(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("templates/new_recipe.html"))
-	tmpl.Execute(w, nil)
+func NewRecipeForm(c *gin.Context) {
+	c.HTML(http.StatusOK, "new_recipe.html", gin.H{})
 }

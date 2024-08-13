@@ -44,11 +44,9 @@ func main() {
 	// Detail
 	router.GET("/recipes/:recipe_id/", handlers.RecipeDetailHandler(env.db))
 	// New
-	router.GET("/recipes/new/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Recipe Form Will Go Here",
-		})
-	})
+	router.GET("/recipes/new/", handlers.NewRecipeForm)
+	// ToDo: Create db entry from posted data
+	//router.POST("/recipes/new/", handlers.NewRecipeForm)
 
 	router.Run(":8080")
 }
