@@ -3,15 +3,13 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/erik-farmer/me-and-u/handlers"
 	"github.com/gin-gonic/gin"
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/joho/godotenv"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
-
-	"github.com/erik-farmer/me-and-u/data"
 )
 
 // Create a custom Env struct which holds a connection pool.
@@ -42,30 +40,9 @@ func main() {
 	router.LoadHTMLGlob("templates/*")
 
 	// List
-	router.GET("/", func(c *gin.Context) {
-		recipes, err := data.AllRecipes(env.db)
-		if err != nil {
-			c.String(http.StatusInternalServerError, "Unable to retrieve Recipes")
-		}
-
-		c.HTML(http.StatusOK, "recipe_list.html", gin.H{
-			"recipes": recipes,
-		})
-	})
+	router.GET("/", handlers.ListRecipesHandler(env.db))
 	// Detail
-	router.GET("/recipes/:recipe_id/", func(c *gin.Context) {
-		recipe_id := c.Param("recipe_id")
-		fmt.Fprintf(os.Stdout, "Router searching for recipe %s\n", recipe_id)
-		recipe, err := data.GetRecipeById(env.db, recipe_id)
-		if err != nil {
-			println(err.Error())
-			c.String(http.StatusNotFound, "Unable to retrieve Recipe with provided ID")
-		}
-
-		c.HTML(http.StatusOK, "recipe_detail.html", gin.H{
-			"recipe": recipe,
-		})
-	})
+	router.GET("/recipes/:recipe_id/", handlers.RecipeDetailHandler(env.db))
 	// New
 	router.GET("/recipes/new/", func(c *gin.Context) {
 		c.JSON(200, gin.H{

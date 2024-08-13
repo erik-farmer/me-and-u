@@ -8,10 +8,9 @@
 <body>
     <div class="container">
         <h1>Recipes</h1>
-        <p>Recipes will go here...allegedly</p>
         <div class="list-group">
             {{range .recipes}}
-            <a class="list-group-item" href="/recipe/{{.ROW_ID}}">{{.Name}}</a>
+            <a class="list-group-item" href="/recipes/{{.ROW_ID}}">{{.Name}}</a>
             {{end}}
         </div>
     </div>
