@@ -45,3 +45,21 @@ func RecipeDetailHandler(db *sql.DB) gin.HandlerFunc {
 func NewRecipeForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "new_recipe.html", gin.H{})
 }
+
+func CreateRecipeFromForm(db *sql.DB) gin.HandlerFunc {
+	fn := func(c *gin.Context) {
+		recipe := data.Recipe{}
+		c.Bind(&recipe)
+
+		stmt := "INSERT INTO recipes (name, url, ingredients, steps, notes) VALUES(?,?,?,?,?);"
+		_, err := db.Exec(stmt, recipe.Name, recipe.URL, recipe.Ingredients, recipe.Steps, recipe.Notes)
+		if err != nil {
+			fmt.Printf("There was an error executing: \n%s\n", stmt)
+			fmt.Printf("Error: \n%s\n", err)
+		}
+
+		c.Redirect(http.StatusTemporaryRedirect, "/")
+	}
+
+	return fn
+}

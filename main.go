@@ -3,13 +3,18 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"github.com/erik-farmer/me-and-u/handlers"
+	authenticator "github.com/erik-farmer/me-and-u/auth"
+	"github.com/erik-farmer/me-and-u/middleware"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"log"
 	"os"
 
 	"github.com/joho/godotenv"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
+
+	"github.com/erik-farmer/me-and-u/handlers"
 )
 
 // Create a custom Env struct which holds a connection pool.
@@ -36,17 +41,30 @@ func main() {
 	env := &Env{db: db}
 
 	// SetUp
+	store := cookie.NewStore([]byte("secret"))
 	router := gin.Default()
+	router.Use(sessions.Sessions("auth-session", store))
 	router.LoadHTMLGlob("templates/*")
+
+	// Authenticator
+	auth, err := authenticator.New()
+	if err != nil {
+		log.Fatalf("Failed to initialize the authenticator: %v", err)
+	}
 
 	// List
 	router.GET("/", handlers.ListRecipesHandler(env.db))
 	// Detail
 	router.GET("/recipes/:recipe_id/", handlers.RecipeDetailHandler(env.db))
 	// New
-	router.GET("/recipes/new/", handlers.NewRecipeForm)
+	router.GET("/recipes/new/", middleware.IsAuthenticated, handlers.NewRecipeForm)
 	// ToDo: Create db entry from posted data
-	//router.POST("/recipes/new/", handlers.NewRecipeForm)
+	router.POST("/recipes/new/", handlers.CreateRecipeFromForm(db))
 
-	router.Run(":8080")
+	// User Auth
+	router.GET("/login", handlers.LoginUser(auth))
+	router.GET("/login_callback", handlers.LoginCallback(auth))
+	router.GET("/logout", handlers.Logout)
+
+	router.Run(":8000")
 }
