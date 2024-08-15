@@ -7,11 +7,11 @@ import (
 
 type Recipe struct {
 	ROW_ID      int
-	Name        string `validate:"required"`
-	URL         string
-	Ingredients string
-	Steps       string
-	Notes       string
+	Name        string `validate:"required" form:"name"`
+	URL         string `form:"url"`
+	Ingredients string `form:"ingredients"`
+	Steps       string `form:"steps"`
+	Notes       string `form:"notes"`
 }
 
 func AllRecipes(db *sql.DB) ([]Recipe, error) {
