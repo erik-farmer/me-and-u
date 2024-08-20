@@ -3,34 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Recipes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css" integrity="sha384-H4X+4tKc7b8s4GoMrylmy2ssQYpDHoqzPa9aKXbDwPoPUA3Ra8PA5dGzijN+ePnH" crossorigin="anonymous">
 </head>
 <body>
-    This page is for creating a new recipe
-    <br />
+<div class="container">
     <form action="/recipes/new/" method="POST">
-        <div>
+        <div class="form-group">
             <label for="name">Recipe Name</label>
-            <input name="name" id="name" />
+            <input name="name" id="name" class="form-control"/>
         </div>
-        <div>
+        <div class="form-group">
             <label for="url">Url</label>
-            <input name="url" id="url" />
+            <input name="url" id="url" class="form-control"/>
         </div>
-        <div>
+        <div class="form-group">
             <label for="ingredients">Ingredients (new line delimited)</label>
-            <input name="ingredients" id="ingredients" />
+            <input name="ingredients" id="ingredients" class="form-control"/>
         </div>
-        <div>
+        <div class="form-group">
             <label for="steps">Steps (new line delimited)</label>
-            <input name="steps" id="steps" />
+            <input name="steps" id="steps" class="form-control"/>
         </div>
-        <div>
+        <div class="form-group">
             <label for="notes">Notes</label>
-            <input name="notes" id="notes" />
+            <input name="notes" id="notes" class="form-control"/>
         </div>
-        <div>
-            <button>Save</button>
+        <div class="form-group">
+            <button class="btn btn-primary">Save</button>
         </div>
     </form>
+</div>
+
 </body>
 </html>
