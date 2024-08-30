@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/erik-farmer/me-and-u/data"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -16,8 +17,11 @@ func ListRecipesHandler(db *sql.DB) gin.HandlerFunc {
 			c.String(http.StatusInternalServerError, "Unable to retrieve Recipes")
 		}
 
+		session := sessions.Default(c)
+		profile := session.Get("profile")
 		c.HTML(http.StatusOK, "recipe_list.html", gin.H{
 			"recipes": recipes,
+			"profile": profile,
 		})
 	}
 
