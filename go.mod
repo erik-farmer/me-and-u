@@ -1,6 +1,6 @@
 module github.com/erik-farmer/me-and-u
 
-go 1.22.1
+go 1.22.7
 
 require (
 	github.com/coreos/go-oidc/v3 v3.11.0
@@ -8,7 +8,6 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/joho/godotenv v1.5.1
 	github.com/tursodatabase/go-libsql v0.0.0-20240916111504-922dfa87e1e6
-	github.com/tursodatabase/libsql-client-go v0.0.0-20240812094001-348a4e45b535
 	golang.org/x/oauth2 v0.22.0
 )
 
@@ -18,7 +17,6 @@ require (
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
-	github.com/coder/websocket v1.8.12 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-jose/go-jose/v4 v4.0.2 // indirect
