@@ -28,6 +28,12 @@ func main() {
 	if err != nil {
 		slog.Warn("Error loading .env file :(")
 	}
+
+	// Default to 8080 unless port specified. non-https (8000) required for local dev with auth
+	applicationPort := ":8080"
+	if port := os.Getenv("APPLICATION_PORT"); port != "" {
+		applicationPort = port
+	}
 	// DB setup
 	primaryUrl := os.Getenv("TURSO_URL")
 	authToken := os.Getenv("TURSO_TOKEN")
@@ -67,5 +73,5 @@ func main() {
 	router.GET("/login_callback", handlers.LoginCallback(auth))
 	router.GET("/logout", handlers.Logout)
 
-	router.Run(":8080")
+	router.Run(applicationPort)
 }
