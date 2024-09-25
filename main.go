@@ -9,6 +9,7 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"log"
+	"log/slog"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -25,7 +26,7 @@ type Env struct {
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		slog.Warn("Error loading .env file :(")
 	}
 	// DB setup
 	primaryUrl := os.Getenv("TURSO_URL")
@@ -49,7 +50,7 @@ func main() {
 	// Authenticator
 	auth, err := authenticator.New()
 	if err != nil {
-		log.Fatalf("Failed to initialize the authenticator: %v", err)
+		log.Printf("Failed to initialize the authenticator: %v", err)
 	}
 
 	// List
@@ -66,5 +67,5 @@ func main() {
 	router.GET("/login_callback", handlers.LoginCallback(auth))
 	router.GET("/logout", handlers.Logout)
 
-	router.Run(":8000")
+	router.Run(":8080")
 }

@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/joho/godotenv"
-	"log"
+	"log/slog"
 	"os"
 
 	"github.com/coreos/go-oidc/v3/oidc"
@@ -21,7 +21,7 @@ type Authenticator struct {
 func New() (*Authenticator, error) {
 	env_err := godotenv.Load()
 	if env_err != nil {
-		log.Fatal("Error loading .env file in auth")
+		slog.Warn("Error loading .env file in auth")
 	}
 
 	provider, err := oidc.NewProvider(
