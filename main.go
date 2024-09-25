@@ -6,12 +6,13 @@ import (
 	"log"
 	"log/slog"
 	"os"
+	"path/filepath"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	_ "github.com/tursodatabase/libsql-client-go/libsql"
+	"github.com/tursodatabase/go-libsql"
 
 	authenticator "github.com/erik-farmer/me-and-u/auth"
 	"github.com/erik-farmer/me-and-u/handlers"
@@ -35,19 +36,35 @@ func main() {
 		applicationPort = port
 	}
 	// DB setup
+	// ToDo: Clean this up into it's own module
+	dbName := "local.db"
 	primaryUrl := os.Getenv("TURSO_URL")
 	authToken := os.Getenv("TURSO_TOKEN")
-	url := primaryUrl + "?authToken=" + authToken
 
-	db, err := sql.Open("libsql", url)
+	dir, err := os.MkdirTemp("", "libsql-*")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to open db err: %s", err)
+		fmt.Println("Error creating temporary directory:", err)
 		os.Exit(1)
 	}
+	defer os.RemoveAll(dir)
+	dbPath := filepath.Join(dir, dbName)
+
+	connector, err := libsql.NewEmbeddedReplicaConnector(dbPath, primaryUrl,
+		libsql.WithAuthToken(authToken),
+	)
+	if err != nil {
+		fmt.Println("Error creating connector:", err)
+		os.Exit(1)
+	}
+	defer connector.Close()
+
+	db := sql.OpenDB(connector)
+	defer db.Close()
+	// End db setup
 
 	env := &Env{db: db}
 
-	// SetUp
+	// Rouer SetUp
 	store := cookie.NewStore([]byte("secret"))
 	router := gin.Default()
 	router.Use(sessions.Sessions("auth-session", store))
