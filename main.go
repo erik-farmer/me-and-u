@@ -3,19 +3,19 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	authenticator "github.com/erik-farmer/me-and-u/auth"
-	"github.com/erik-farmer/me-and-u/middleware"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
-	"github.com/gin-gonic/gin"
 	"log"
 	"log/slog"
 	"os"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	_ "github.com/tursodatabase/libsql-client-go/libsql"
 
+	authenticator "github.com/erik-farmer/me-and-u/auth"
 	"github.com/erik-farmer/me-and-u/handlers"
+	"github.com/erik-farmer/me-and-u/middleware"
 )
 
 // Create a custom Env struct which holds a connection pool.
