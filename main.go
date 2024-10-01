@@ -68,7 +68,7 @@ func main() {
 	store := cookie.NewStore([]byte("secret"))
 	router := gin.Default()
 	router.Use(sessions.Sessions("auth-session", store))
-	router.LoadHTMLGlob("templates/*")
+	router.LoadHTMLGlob("./templates/*")
 
 	// Authenticator
 	auth, err := authenticator.New()
