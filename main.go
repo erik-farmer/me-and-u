@@ -70,6 +70,11 @@ func main() {
 	env := &Env{db: db}
 
 	// Rouer SetUp
+	releaseMode := gin.DebugMode
+	if envMode := os.Getenv("RELEASE_MODE"); envMode == "PROD" {
+		releaseMode = gin.ReleaseMode
+	}
+	gin.SetMode(releaseMode)
 	store := cookie.NewStore([]byte("secret"))
 	router := gin.Default()
 	router.Use(sessions.Sessions("auth-session", store))
