@@ -2,7 +2,9 @@ package main
 
 import (
 	"database/sql"
+	"embed"
 	"fmt"
+	"html/template"
 	"log"
 	"log/slog"
 	"os"
@@ -23,6 +25,9 @@ import (
 type Env struct {
 	db *sql.DB
 }
+
+//go:embed templates
+var f embed.FS
 
 func main() {
 	err := godotenv.Load()
@@ -68,7 +73,9 @@ func main() {
 	store := cookie.NewStore([]byte("secret"))
 	router := gin.Default()
 	router.Use(sessions.Sessions("auth-session", store))
-	router.LoadHTMLGlob("./templates/*")
+	//router.LoadHTMLGlob("./templates/*")
+	templ := template.Must(template.New("").ParseFS(f, "templates/*.html"))
+	router.SetHTMLTemplate(templ)
 
 	// Authenticator
 	auth, err := authenticator.New()
