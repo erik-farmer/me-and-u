@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"os"
@@ -21,6 +23,7 @@ func Logout(ctx *gin.Context) {
 	}
 
 	returnTo, err := url.Parse(scheme + "://" + ctx.Request.Host)
+	slog.Info(fmt.Sprintf("Return to: %s", returnTo))
 	if err != nil {
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return
