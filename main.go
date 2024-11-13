@@ -40,6 +40,8 @@ func main() {
 	if port := os.Getenv("APPLICATION_PORT"); port != "" {
 		applicationPort = port
 	}
+	slog.Info(fmt.Sprintf("Application running on port %s", applicationPort))
+
 	// DB setup
 	// ToDo: Clean this up into it's own module
 	dbName := "local.db"
