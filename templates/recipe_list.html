@@ -6,12 +6,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css" integrity="sha384-H4X+4tKc7b8s4GoMrylmy2ssQYpDHoqzPa9aKXbDwPoPUA3Ra8PA5dGzijN+ePnH" crossorigin="anonymous">
 </head>
 <script>
-    $(document).ready(function () {
-        $('#btn-logout').click(function (e) {
-            Cookies.remove('auth-session');
-        });
+    document.addEventListener("DOMContentLoaded", function() {
+        const logoutButton = document.querySelector('#btn-logout');
+
+        if (logoutButton) {
+            logoutButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.cookie = "auth-session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                window.location.href = "/logout";
+            });
+        }
     });
 </script>
+
 <body>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">

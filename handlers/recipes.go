@@ -6,6 +6,7 @@ import (
 	"github.com/erik-farmer/me-and-u/data"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"os"
 )
@@ -55,14 +56,21 @@ func CreateRecipeFromForm(db *sql.DB) gin.HandlerFunc {
 		recipe := data.Recipe{}
 		c.Bind(&recipe)
 
+		// Insert our form data into the DB
 		stmt := "INSERT INTO recipes (name, url, ingredients, steps, notes) VALUES(?,?,?,?,?);"
-		_, err := db.Exec(stmt, recipe.Name, recipe.URL, recipe.Ingredients, recipe.Steps, recipe.Notes)
+		result, err := db.Exec(stmt, recipe.Name, recipe.URL, recipe.Ingredients, recipe.Steps, recipe.Notes)
 		if err != nil {
 			fmt.Printf("There was an error executing: \n%s\n", stmt)
 			fmt.Printf("Error: \n%s\n", err)
 		}
 
-		c.Redirect(http.StatusTemporaryRedirect, "/")
+		// Get the rowid for the redirect to the detail view and do said redirect
+		lastInsertID, err := result.LastInsertId()
+		if err != nil {
+			log.Fatalf("Failed to get last insert id: %v", err)
+		}
+		log.Printf("Inserted record with rowid: %d", lastInsertID)
+		c.Redirect(http.StatusSeeOther, fmt.Sprintf("/recipes/%d", lastInsertID))
 	}
 
 	return fn

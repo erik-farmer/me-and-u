@@ -18,7 +18,7 @@ func Logout(ctx *gin.Context) {
 	}
 
 	scheme := "http"
-	if ctx.Request.TLS != nil {
+	if ctx.Request.Header.Get("X-Forwarded-Proto") == "https" {
 		scheme = "https"
 	}
 
