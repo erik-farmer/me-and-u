@@ -11,9 +11,9 @@
         <a href="{{ .recipe.URL}}">Link</a>
         <hr/>
         <h2>Ingredients</h2>
-        {{ .recipe.Ingredients}}
+        <div style="white-space: pre-wrap;">{{.templatedIngredients}}</div>
         <h2>Steps</h2>
-        {{ .recipe.Steps}}
+        <div style="white-space: pre-wrap;">{{.templatedSteps}}</div>
         <h2>Notes</h2>
         {{ .recipe.Notes}}
     </div>

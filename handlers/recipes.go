@@ -6,9 +6,11 @@ import (
 	"github.com/erik-farmer/me-and-u/data"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 func ListRecipesHandler(db *sql.DB) gin.HandlerFunc {
@@ -38,9 +40,14 @@ func RecipeDetailHandler(db *sql.DB) gin.HandlerFunc {
 			println(err.Error())
 			c.String(http.StatusNotFound, "Unable to retrieve Recipe with provided ID")
 		}
-
+		recipe.Ingredients = strings.ReplaceAll(recipe.Ingredients, "\r\n", "<br>")
+		templatedIngredients := template.HTML(recipe.Ingredients)
+		recipe.Steps = strings.ReplaceAll(recipe.Steps, "\r\n", "<br>")
+		templatedSteps := template.HTML(recipe.Steps)
 		c.HTML(http.StatusOK, "recipe_detail.html", gin.H{
-			"recipe": recipe,
+			"recipe":               recipe,
+			"templatedIngredients": templatedIngredients,
+			"templatedSteps":       templatedSteps,
 		})
 	}
 
