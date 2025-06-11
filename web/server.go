@@ -66,7 +66,8 @@ func StartServer() {
 	//router.POST("/recipes/new/", handlers.CreateRecipeFromForm(db))
 
 	// User Auth
-	//router.GET("/login", handlers.LoginUser(auth))
+	router.GET("/login", handlers.LoginForm)
+	router.POST("/login", handlers.LoginUser(env.db))
 	//router.GET("/login_callback", handlers.LoginCallback(auth))
 	//router.GET("/logout", handlers.Logout)
 

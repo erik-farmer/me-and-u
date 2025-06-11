@@ -2,6 +2,7 @@ package data
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"time"
@@ -30,4 +31,18 @@ func CreateUser(db *sql.DB, username, password string) error {
 	}
 
 	return nil
+}
+
+func GetUserByUsername(db *sql.DB, username string) (User, error) {
+	var user User
+	row := db.QueryRow("SELECT id, username, password_hash, created_at FROM users WHERE username = ?", username)
+
+	err := row.Scan(&user.ID, &user.Username, &user.PasswordHash, &user.CreatedAt)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return user, fmt.Errorf("user not found")
+		}
+		return user, fmt.Errorf("failed to retrieve user: %w", err)
+	}
+	return user, nil
 }
