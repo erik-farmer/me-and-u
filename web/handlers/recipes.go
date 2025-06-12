@@ -18,11 +18,11 @@ func ListRecipesHandler(db *sql.DB) gin.HandlerFunc {
 			c.String(http.StatusInternalServerError, "Unable to retrieve Recipes")
 		}
 
-		//session := sessions.Default(c)
-		//profile := session.Get("profile")
+		usernameVal, _ := c.Get("Username")
+		username, _ := usernameVal.(string)
 		c.HTML(http.StatusOK, "recipe_list.html", gin.H{
-			"recipes": recipes,
-			//"profile": profile,
+			"recipes":  recipes,
+			"Username": username,
 		})
 	}
 

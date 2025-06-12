@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/erik-farmer/me-and-u/data"
 	"github.com/erik-farmer/me-and-u/web/handlers"
+	"github.com/erik-farmer/me-and-u/web/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"html/template"
@@ -49,27 +50,25 @@ func StartServer() {
 		releaseMode = gin.ReleaseMode
 	}
 	gin.SetMode(releaseMode)
-	//store := cookie.NewStore([]byte("secret"))
 	router := gin.Default()
-	//router.Use(sessions.Sessions("auth-session", store))
-	//router.LoadHTMLGlob("./templates/*")
 	templ := template.Must(template.New("").ParseFS(tmplFS, "templates/*.html"))
 	router.SetHTMLTemplate(templ)
+
+	router.Use(middleware.InjectUsername())
 
 	// List
 	router.GET("/", handlers.ListRecipesHandler(env.db))
 	// Detail
 	router.GET("/recipes/:recipe_id/", handlers.RecipeDetailHandler(env.db))
 	//// New
-	//router.GET("/recipes/new/", handlers.NewRecipeForm)
+	router.GET("/recipes/new/", middleware.RequireAuth, handlers.NewRecipeForm)
 	//// ToDo: Create db entry from posted data
 	//router.POST("/recipes/new/", handlers.CreateRecipeFromForm(db))
 
 	// User Auth
 	router.GET("/login", handlers.LoginForm)
 	router.POST("/login", handlers.LoginUser(env.db))
-	//router.GET("/login_callback", handlers.LoginCallback(auth))
-	//router.GET("/logout", handlers.Logout)
+	router.GET("/logout", handlers.Logout)
 
 	slog.Info(fmt.Sprintf("Application running on port %s", applicationPort))
 	router.Run(applicationPort)

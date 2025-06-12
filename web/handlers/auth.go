@@ -96,3 +96,15 @@ func ParseToken(tokenStr string) (string, error) {
 
 	return username, nil
 }
+
+func Logout(c *gin.Context) {
+	c.SetCookie(
+		"auth_token", "",
+		-1,
+		"/",
+		"",
+		true,
+		true,
+	)
+	c.Redirect(http.StatusSeeOther, "/")
+}
