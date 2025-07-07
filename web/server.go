@@ -63,7 +63,7 @@ func StartServer() {
 	//// New
 	router.GET("/recipes/new/", middleware.RequireAuth, handlers.NewRecipeForm)
 	//// ToDo: Create db entry from posted data
-	//router.POST("/recipes/new/", handlers.CreateRecipeFromForm(db))
+	router.POST("/recipes/new/", handlers.CreateRecipeFromForm(db))
 
 	// User Auth
 	router.GET("/login", handlers.LoginForm)

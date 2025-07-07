@@ -21,7 +21,8 @@ func ListRecipesHandler(db *sql.DB) gin.HandlerFunc {
 		usernameVal, _ := c.Get("Username")
 		username, _ := usernameVal.(string)
 		c.HTML(http.StatusOK, "recipe_list.html", gin.H{
-			"recipes":  recipes,
+			"Title":    "Recipes",
+			"Recipes":  recipes,
 			"Username": username,
 		})
 	}
